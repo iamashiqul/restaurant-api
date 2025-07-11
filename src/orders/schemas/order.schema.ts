@@ -1,23 +1,28 @@
-import { Prop, Schema } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-import * as mongoose from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class Order extends Document {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', required: true })
   user: string;
 
   @Prop([
     {
-      menu: { type: mongoose.Schema.Types.ObjectId, ref: 'Menu' },
-      quantity: Number,
+      menu: { type: MongooseSchema.Types.ObjectId, ref: 'Menu', required: true },
+      quantity: { type: Number, required: true },
     },
   ])
   items: { menu: string; quantity: number }[];
 
-  @Prop({ default: 'pending' })
+  @Prop({
+    type: String,
+    enum: ['pending', 'in_progress', 'completed'],
+    default: 'pending',
+  })
   status: 'pending' | 'in_progress' | 'completed';
 
-  @Prop()
+  @Prop({ required: true })
   totalPrice: number;
 }
+
+export const OrderSchema = SchemaFactory.createForClass(Order);
