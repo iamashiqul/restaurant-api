@@ -19,4 +19,12 @@ export class OrdersService {
       totalPrice: total,
     });
   }
+  async findUserOrders(userId: string) {
+  return this.orderModel
+    .find({ user: userId })
+    .populate('items.menu')
+    .sort({ createdAt: -1 })
+    .exec();
+}
+
 }
