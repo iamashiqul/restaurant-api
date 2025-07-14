@@ -27,4 +27,15 @@ export class OrdersService {
     .exec();
 }
 
+async findAllOrders(limit = 50, skip = 0) {
+  return this.orderModel
+    .find()
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .populate('user', 'name email role')
+    .populate('items.menu');
+}
+
+
 }
