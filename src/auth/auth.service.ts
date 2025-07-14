@@ -32,4 +32,16 @@ export class AuthService {
     const user = await this.usersService.create(data);
     return this.login(user);
   }
+  async generateTokens(payload: any) {
+  const [access_token, refresh_token] = await Promise.all([
+    this.jwtService.signAsync(payload, { expiresIn: '15m' }),
+    this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_REFRESH_SECRET,
+      expiresIn: '7d',
+    }),
+  ]);
+
+  return { access_token, refresh_token };
+}
+
 }
