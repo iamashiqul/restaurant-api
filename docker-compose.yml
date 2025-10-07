@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # MongoDB Service
   mongodb:
@@ -28,6 +26,12 @@ services:
       - N8N_HOST=localhost
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
+      # Ngrok environment variables for external access
+      - EDITOR_BASE_URL=https://inspectorial-daniele-multifocal.ngrok-free.dev 
+      - WEBHOOK_URL=https://inspectorial-daniele-multifocal.ngrok-free.dev 
+      - N8N_DEFAULT_BINARY_DATA_MODE=filesystem
+      - N8N_COMMUNITY_PACKAGES_ALLOWED=true
+      - N8N_RUNNERS_ENABLED=true
     volumes:
       - n8n_data:/home/node/.n8n
       - ./scripts:/scripts
@@ -37,7 +41,6 @@ services:
     networks:
       - restaurant-network
     restart: unless-stopped
-
   # Node.js App Service
   node-app:
     image: node:18-alpine
